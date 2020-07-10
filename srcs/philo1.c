@@ -1,36 +1,5 @@
 #include "philo.h"
 
-void        ft_putchar(char caract)
-{
-    write(1, &caract, 1);
-}
-
-void        ft_putstr(char *str)
-{
-    size_t i;
-
-    i = 0;
-    while (str[i])
-    {
-        ft_putchar(str[i]);
-        i++;
-    }
-}
-
-long int    get_time(long int type)
-{
-    long int        time;
-    struct timeval  te;
-    
-    gettimeofday(&te, NULL);
-    if (type == 0)
-        time = te.tv_sec * 1000LL + te.tv_usec/1000;
-    else
-        time = (te.tv_sec * 1000LL + te.tv_usec/1000) - type; 
-
-    return (time);
-}
-
 int		ft_atoi(const char *str)
 {
     long				i;
@@ -77,19 +46,37 @@ void        ft_work(void *philos)
 {
     s_struct*   philo; 
     int         id;
+    long int    stime;
+    long int    time;
 
     philo = (s_struct*)philos;
+    stime = get_time(0);
     id = philo->ids;
     philo->ids += 1;
-    printf("ID %d\n", id);
+    ft_messages( id, 0, 1, philos);
     philo->lock = 0;
     while (1)
     {
-        if (1 == 2)
-        {
-            printf("Ok I'm back !\n");
-        }
+        time = get_time(stime);
+        if (time >= philo->tdie)
+            break ;
     }
+    ft_messages(id, time, 2, philos);
+}
+
+pthread_mutex_t     *ft_initf(pthread_mutex_t *array, size_t limit)
+{
+    size_t i;
+
+    i = 0;
+    if (!(array = malloc(sizeof(pthread_mutex_t) * (limit + 1))))
+        return (NULL);
+    while (i < limit)
+    {
+        pthread_mutex_init(&array[i], NULL);
+        i++;
+    }
+    return (array);
 }
 
 s_struct    ft_init(s_struct philos, char **av, int ac)
@@ -104,6 +91,9 @@ s_struct    ft_init(s_struct philos, char **av, int ac)
         philos.tsleep = ft_atoi(av[4]);
         philos.ids = 0;
         philos.lock = 0;
+        philos.limit = (philos.nbphilos / 2);
+        philos.eat_l = ft_initf(philos.eat_l, philos.limit);
+        pthread_mutex_init(&philos.talk, NULL);
     }
     else
     {
@@ -116,16 +106,16 @@ s_struct    ft_init(s_struct philos, char **av, int ac)
         philos.nbeat = ft_atoi(av[5]);
         philos.ids = 0;
         philos.lock = 0;
+        philos.eat_l = ft_initf(philos.eat_l, philos.limit);
+        pthread_mutex_init(&philos.talk, NULL);
     }
     return (philos);
 }
 
 void        ft_core(s_struct philos)
 {
-    long int    stime;
     pthread_t   tid;
 
-    stime = get_time(0);
     while (1)
     {
         if (philos.nbphilos > philos.ids && philos.lock == 0)
@@ -133,7 +123,6 @@ void        ft_core(s_struct philos)
             philos.lock = 1;
             pthread_create(&tid, NULL, ft_work, (void*)&philos);
         }
-        //printf("TIME : %ld\n", get_time(stime));
     }
 }
 
