@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <time.h>
-#include <inttypes.h>
-#include <sys/time.h>
-#include <unistd.h>
+#include "philo.h"
 
 void        ft_putchar(char caract)
 {
@@ -37,6 +31,34 @@ long int    get_time(long int type)
     return (time);
 }
 
+int		ft_atoi(const char *str)
+{
+    long				i;
+	long long			result;
+	long long			signe;
+
+	i = 0;
+	signe = 1;
+	result = 0;
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' ||
+			str[i] == '\v' || str[i] == '\f' || str[i] == '\r')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			signe *= -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		result = result * 10 + (str[i] - 48);
+		i++;
+	}
+	if (!(str[i] >= '0' && str[i] <= '9'))
+		return (result * signe);
+	return (result * signe);
+}
+
 int         ft_isnum(char *str)
 {
     size_t i;
@@ -51,16 +73,32 @@ int         ft_isnum(char *str)
     return (1);
 }
 
+void        ft_work(int x)
+{
+    printf("Philo number %d was launch\n", x);
+    usleep(1000000000);
+    printf("Ok I'm back !\n");
+}
+
 void        ft_core(char *philos, char *t_die, char *t_eat, char *t_sleep, char *limit)
 {
     long int    stime;
+    pthread_t   tid;
+    int         x;
 
     if (!(ft_isnum(philos) && ft_isnum(t_die) && ft_isnum(t_eat) && ft_isnum(t_sleep) && ft_isnum(limit)))
         return ;
+    x = 0;
     stime = get_time(0);
     while (1)
     {
-        printf("TIME : %ld\n", get_time(stime));
+        if (ft_atoi(philos) > x)
+        {
+            pthread_create(&tid, NULL, ft_work, &x);
+            printf("Launch\n");
+            x++;
+        }
+        //printf("TIME : %ld\n", get_time(stime));
     }
 }
 
