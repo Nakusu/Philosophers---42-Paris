@@ -11,10 +11,10 @@
 
 typedef struct  t_struct
 {
-    int nb philos;
+    int nbphilos;
+    int tdie;
     int teat;
     int tsleep;
-    int tdo;
     int nbeat;
 }               s_struct;
 

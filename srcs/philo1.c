@@ -80,19 +80,42 @@ void        ft_work(int x)
     printf("Ok I'm back !\n");
 }
 
-void        ft_core(char *philos, char *t_die, char *t_eat, char *t_sleep, char *limit)
+s_struct    ft_init(s_struct philos, char **av, int ac)
+{
+    if (ac == 5)
+    {
+        if (!(ft_isnum(av[1]) && ft_isnum(av[2]) && ft_isnum(av[3]) && ft_isnum(av[4])))
+            return (philos);
+        philos.nbphilos = ft_atoi(av[1]);
+        philos.tdie = ft_atoi(av[2]);
+        philos.teat = ft_atoi(av[3]);
+        philos.tsleep = ft_atoi(av[4]);
+    }
+    else
+    {
+        if (!(ft_isnum(av[1]) && ft_isnum(av[2]) && ft_isnum(av[3]) && ft_isnum(av[4]) && ft_isnum(av[5])))
+            return (philos);
+        philos.nbphilos = ft_atoi(av[1]);
+        philos.tdie = ft_atoi(av[2]);
+        philos.teat = ft_atoi(av[3]);
+        philos.tsleep = ft_atoi(av[4]);
+        philos.nbeat = ft_atoi(av[5]);
+    }
+    return (philos);
+}
+
+void        ft_core(s_struct philos, char **av, int ac)
 {
     long int    stime;
     pthread_t   tid;
     int         x;
 
-    if (!(ft_isnum(philos) && ft_isnum(t_die) && ft_isnum(t_eat) && ft_isnum(t_sleep) && ft_isnum(limit)))
-        return ;
     x = 0;
+    philos = ft_init(philos, av, ac);
     stime = get_time(0);
     while (1)
     {
-        if (ft_atoi(philos) > x)
+        if (philos.nbphilos > x)
         {
             pthread_create(&tid, NULL, ft_work, &x);
             printf("Launch\n");
@@ -104,13 +127,10 @@ void        ft_core(char *philos, char *t_die, char *t_eat, char *t_sleep, char 
 
 int         main(int ac, char **av)
 {
+    s_struct philos;
+
     if (ac == 5 || ac == 6)
-    {
-        if (ac == 4)
-            ft_core(av[1], av[2], av[3], av[4], 0);
-        else
-            ft_core(av[1], av[2], av[3], av[4], av[5]);
-    }
+        ft_core(philos, av, ac);
     else
     {
         ft_putstr("Erreur : Veuillez lancer correctement le programme !\n");
