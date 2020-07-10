@@ -16,6 +16,8 @@ typedef struct  t_struct
     int teat;
     int tsleep;
     int nbeat;
+    int ids;
+    int lock;
 }               s_struct;
 
 #endif

@@ -73,11 +73,23 @@ int         ft_isnum(char *str)
     return (1);
 }
 
-void        ft_work(int x)
+void        ft_work(void *philos)
 {
-    printf("Philo number %d was launch\n", x);
-    usleep(1000000000);
-    printf("Ok I'm back !\n");
+    s_struct*   philo; 
+    int         id;
+
+    philo = (s_struct*)philos;
+    id = philo->ids;
+    philo->ids += 1;
+    printf("ID %d\n", id);
+    philo->lock = 0;
+    while (1)
+    {
+        if (1 == 2)
+        {
+            printf("Ok I'm back !\n");
+        }
+    }
 }
 
 s_struct    ft_init(s_struct philos, char **av, int ac)
@@ -90,6 +102,8 @@ s_struct    ft_init(s_struct philos, char **av, int ac)
         philos.tdie = ft_atoi(av[2]);
         philos.teat = ft_atoi(av[3]);
         philos.tsleep = ft_atoi(av[4]);
+        philos.ids = 0;
+        philos.lock = 0;
     }
     else
     {
@@ -100,26 +114,24 @@ s_struct    ft_init(s_struct philos, char **av, int ac)
         philos.teat = ft_atoi(av[3]);
         philos.tsleep = ft_atoi(av[4]);
         philos.nbeat = ft_atoi(av[5]);
+        philos.ids = 0;
+        philos.lock = 0;
     }
     return (philos);
 }
 
-void        ft_core(s_struct philos, char **av, int ac)
+void        ft_core(s_struct philos)
 {
     long int    stime;
     pthread_t   tid;
-    int         x;
 
-    x = 0;
-    philos = ft_init(philos, av, ac);
     stime = get_time(0);
     while (1)
     {
-        if (philos.nbphilos > x)
+        if (philos.nbphilos > philos.ids && philos.lock == 0)
         {
-            pthread_create(&tid, NULL, ft_work, &x);
-            printf("Launch\n");
-            x++;
+            philos.lock = 1;
+            pthread_create(&tid, NULL, ft_work, (void*)&philos);
         }
         //printf("TIME : %ld\n", get_time(stime));
     }
@@ -130,7 +142,10 @@ int         main(int ac, char **av)
     s_struct philos;
 
     if (ac == 5 || ac == 6)
-        ft_core(philos, av, ac);
+    {
+        philos = ft_init(philos, av, ac);
+        ft_core(philos);
+    }
     else
     {
         ft_putstr("Erreur : Veuillez lancer correctement le programme !\n");
