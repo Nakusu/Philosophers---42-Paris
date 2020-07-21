@@ -6,6 +6,10 @@ void    ft_tmessage(int type)
         ft_putstr(" is launch !\n");
     else if (type == 2)
         ft_putstr(" is die !\n");
+    else if (type == 3)
+        ft_putstr(" is eating !\n");
+    else if (type == 4)
+        ft_putstr(" is sleeping ! \n");
     
 }
 

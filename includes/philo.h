@@ -9,16 +9,26 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+typedef struct s_thread
+{
+    long int    lasteat;
+    int         iseating;
+    int         nbeating;
+
+}               t_thread;
+
 typedef struct  t_struct
 {
-    int nbphilos;
-    int tdie;
-    int teat;
-    int tsleep;
-    int nbeat;
-    int ids;
-    int lock;
-    int limit;
+    int             nbphilos;
+    int             tdie;
+    int             teat;
+    int             tsleep;
+    int             nbeat;
+    int             ids;
+    int             lock;
+    int             limit;
+    int             eating;
+    t_thread        *threads;
     pthread_mutex_t *eat_l;
     pthread_mutex_t talk;
 }               s_struct;
