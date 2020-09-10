@@ -1,18 +1,60 @@
-#include "philo.h"
+#include "header.h"
 
-void        ft_putchar(char caract)
+long long   ft_atoi(const char *str)
 {
-    write(1, &caract, 1);
+    long				i;
+	long long			result;
+	long long			signe;
+
+	i = 0;
+	signe = 1;
+	result = 0;
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' ||
+			str[i] == '\v' || str[i] == '\f' || str[i] == '\r')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			signe *= -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		result = result * 10 + (str[i] - 48);
+		i++;
+	}
+	if (!(str[i] >= '0' && str[i] <= '9'))
+		return (result * signe);
+	return (result * signe);
 }
 
-void        ft_putstr(char *str)
+int         ft_isnum(char *str)
+{
+    size_t i;
+
+    i = 0;
+    while (str && str[i])
+    {
+        if (!(str[i] >= '0' && str[i] <= '9'))
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
+void        ft_putchar(char caract, int fd)
+{
+    write(fd, &caract, 1);
+}
+
+void        ft_putstr(char *str, int fd)
 {
     size_t i;
 
     i = 0;
     while (str[i])
     {
-        ft_putchar(str[i]);
+        ft_putchar(str[i], fd);
         i++;
     }
 }
@@ -24,18 +66,17 @@ void         ft_putnbr(int n)
     val = n;
     if (val < 0)
     {
-        ft_putchar('-');
+        ft_putchar('-', 1);
         val = -val;
     }
     if (val > 9)
     {
         ft_putnbr(val / 10);
-        ft_putchar((val % 10) + '0');
+        ft_putchar((val % 10) + '0', 1);
     }
     else
-        ft_putchar(val + '0');
+        ft_putchar(val + '0', 1);
 }
-
 
 long int    get_time(long int type)
 {
