@@ -47,16 +47,19 @@ void        ft_putchar(char caract, int fd)
     write(fd, &caract, 1);
 }
 
-void        ft_putstr(char *str, int fd)
+size_t      ft_strlen(char *str)
 {
     size_t i;
 
     i = 0;
     while (str[i])
-    {
-        ft_putchar(str[i], fd);
         i++;
-    }
+    return (i);
+}
+
+void        ft_putstr(char *str, int fd)
+{
+    write(fd, str, ft_strlen(str));
 }
 
 void         ft_putnbr(int n)
@@ -90,4 +93,14 @@ long int    get_time(long int type)
         time = (te.tv_sec * 1000LL + te.tv_usec/1000) - type; 
 
     return (time);
+}
+
+void        osleep(long int time)
+{
+    long int    start;
+
+    start = get_time(0);
+    while (get_time(start) < time)
+        usleep(1);
+    
 }
