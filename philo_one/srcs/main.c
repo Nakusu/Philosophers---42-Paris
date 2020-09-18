@@ -2,7 +2,7 @@
 
 void initKeys(t_global *global)
 {
-    size_t i;
+    int i;
 
     i = 0;
     if (!(global->keys = malloc(sizeof(pthread_mutex_t) * global->maxthreads)))
@@ -93,6 +93,8 @@ void    ft_eat(t_philo *philo, long int timestamp, t_global *global)
     i = (philo->id == 0) ? global->maxthreads - 1 : -1 ;
     if (pthread_mutex_lock(&global->keys[philo->id]) == 0 && pthread_mutex_lock(&global->keys[philo->id + i]) == 0)
     {
+        ft_messages(philo->id, timestamp, global, "as ta king a fork !");
+        ft_messages(philo->id, timestamp, global, "as taking a fork !");
         ft_messages(philo->id, timestamp, global, "is eating !");
         philo->last_eat = get_time(0);
         osleep(global->timeEat);
@@ -104,8 +106,8 @@ void    ft_eat(t_philo *philo, long int timestamp, t_global *global)
 
 void    ft_sleep(t_philo *philo, long int timestamp, t_global *global)
 {
-        ft_messages(philo->id, timestamp, global, "is sleeping !");
-        osleep(global->tsleep);
+    ft_messages(philo->id, timestamp, global, "is sleeping !");
+    osleep(global->tsleep);
 }
 
 void    *ft_jobs(void *global)
@@ -148,7 +150,7 @@ void    ft_core(t_global *global)
 
 void    ft_monitoring(t_global *global)
 {
-    size_t i;
+    int i;
 
     while (global->die == 0)
     {

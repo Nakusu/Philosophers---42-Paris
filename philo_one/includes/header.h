@@ -20,13 +20,13 @@ void        ft_start(void *global);
 void        osleep(long int time);
 char		*ft_itoa(long int n);
 void	    *ft_calloc(size_t count, size_t size);
+size_t      ft_strlen(char *str);
 
 typedef struct s_philo
 {
     int         id;
     int         eat;
     long int    last_eat;
-
 }              t_philo;
 
 typedef struct s_global
