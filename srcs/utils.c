@@ -57,9 +57,74 @@ size_t      ft_strlen(char *str)
     return (i);
 }
 
-void        ft_putstr(char *str, int fd)
+void            ft_putstr(char *str, int fd)
 {
     write(fd, str, ft_strlen(str));
+}
+
+static long int	ft_cnb(int n)
+{
+	long int r;
+
+	r = 0;
+	if (n < 0)
+	{
+		r++;
+		n *= -1;
+	}
+	else if (n == 0)
+		r++;
+	while (n != 0)
+	{
+		n /= 10;
+		r++;
+	}
+	return (r);
+}
+
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*tmp;
+	size_t	i;
+
+	i = 0;
+	if (count == 0)
+		count = 1;
+	if (!size || !(tmp = malloc(count * size)))
+		return (NULL);
+	while (i < count * size)
+	{
+		((unsigned char *)tmp)[i] = '\0';
+		i++;
+	}
+	return (tmp);
+}
+
+char			*ft_itoa(long int n)
+{
+	char		*result;
+	long int	stock;
+	int			i;
+
+	i = (ft_cnb(n) - 1);
+	stock = n;
+	if (!(result = ft_calloc((size_t)ft_cnb(n) + 1, sizeof(char))))
+		return (NULL);
+	if (n < 0)
+	{
+		stock *= -1;
+		result[0] = '-';
+	}
+	else if (n == 0)
+		result[0] = '0';
+	while (stock != 0)
+	{
+		result[i] = (stock % 10) + 48;
+		stock /= 10;
+		i--;
+	}
+	return (result);
 }
 
 void         ft_putnbr(int n)

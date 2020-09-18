@@ -20,6 +20,7 @@ int initGobal(char **str, int ac, t_global *global)
     global->maxeats = (ac == 5) ? -1 : ft_atoi(str[5]);
     global->threads = 0;
     global->die = 0;
+    global->t_start = get_time(0);
     if ((ac == 6 && global->maxeats <= 0) || (global->maxthreads = ft_atoi(str[1])) <= 0 || (global->timeDie = ft_atoi(str[2])) <= 0 || (global->timeEat = ft_atoi(str[3])) <= 0 || (global->tsleep = ft_atoi(str[4])) <= 0)
     {
         ft_putstr("Error : launch correctly the program !\n", 2);
@@ -49,16 +50,37 @@ void    ft_tmessage(int type)
     
 }
 
+char    *ft_completestr(char *str, char *src)
+{
+    size_t i;
+    size_t j;
+
+    i = 0;
+    j = 0;
+    str[i++] = ' ';
+    while (src[j])
+    {
+        str[i] = src[j];
+        i++;
+        j++;
+    }
+    str[i] = '\n';
+    return (str);
+}
+
 void    ft_messages(int id, long int timestamp, t_global *global, char *message)
 {
+    char    *tmp;
+
+    if (!(tmp = ft_calloc((ft_strlen(message) + 3), sizeof(char))))
+        return ;
     if (pthread_mutex_lock(&global->talk) == 0)
     {
-        ft_putnbr(timestamp);
-        ft_putstr(" ", 1);
-        ft_putnbr(id);
-        ft_putstr(" ", 1);
-        ft_putstr(message, 1);
-        ft_putchar('\n', 1);
+        ft_putstr(ft_itoa(timestamp), 1);
+        ft_putchar(' ', 1);
+        ft_putstr(ft_itoa(id), 1);
+        ft_putstr(ft_completestr(tmp, message), 1);
+        free(tmp);
         pthread_mutex_unlock(&global->talk);
     }
 }
@@ -95,19 +117,14 @@ void    *ft_jobs(void *global)
     info = (t_global*)global;
     i = info->threads;
     info->philos[i].id = info->threads;
-    ft_messages(i, 0, info, "was launch");
-    info->philos[i].t_start = get_time(0);
+    ft_messages(i, get_time(info->t_start), info, "was launch");
+    info->philos[i].last_eat = get_time(0);
     while (info->die == 0)
     {
-        time = get_time(info->philos[i].t_start);
+        time = get_time(info->t_start);
         ft_eat(&info->philos[i], time, info);
         ft_sleep(&info->philos[i], time, info);
         ft_messages(info->philos[i].id, time, global, "is thinking !");
-        if (get_time(info->philos[i].last_eat) > info->timeDie)
-        {
-            ft_messages(info->philos[i].id, time, global, "is die !");
-            info->die += 1;
-        }
     }
     return (global);
 }
@@ -118,15 +135,34 @@ void    ft_core(t_global *global)
     pthread_t   tid;
 
     i = 0;
-    printf("MAX : %d\n", global->maxthreads);
     while (i < global->maxthreads)
     {
         if (pthread_create(&tid, NULL, ft_jobs, global) != 0)
             return ;
         pthread_detach(tid);
         global->threads += 1;
-        osleep(10);
+        osleep(5);
         i++;
+    }
+}
+
+void    ft_monitoring(t_global *global)
+{
+    size_t i;
+
+    while (global->die == 0)
+    {
+        i = 0;
+        while (i < global->maxthreads && global->die == 0)
+        {
+            if (global->philos[i].last_eat > 0 && get_time(global->philos[i].last_eat) > global->timeDie)
+            {
+                //printf("%ld\n", global->philos[i].last_eat);
+                ft_messages(global->philos[i].id, get_time(global->t_start), global, "is die !");
+                global->die += 1;
+            }
+            i++;
+        }
     }
 }
 
@@ -138,7 +174,7 @@ int     main(int ac, char **av)
         if (initGobal(av, ac, &global) == 0)
             return (0);
         ft_core(&global);
-        while (global.die == 0);
+        ft_monitoring(&global);
         return (1);
     }
     ft_putstr("Error : launch correctly the program !\n", 2);

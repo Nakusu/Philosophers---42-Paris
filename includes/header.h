@@ -18,12 +18,13 @@ int         ft_isnum(char *str);
 long long   ft_atoi(const char *str);
 void        ft_start(void *global);
 void        osleep(long int time);
+char		*ft_itoa(long int n);
+void	    *ft_calloc(size_t count, size_t size);
 
 typedef struct s_philo
 {
     int         id;
     int         eat;
-    long int    t_start;
     long int    last_eat;
 
 }              t_philo;
@@ -36,6 +37,7 @@ typedef struct s_global
     long int    timeDie;
     long int    timeEat;
     long int    tsleep;
+    long int    t_start;
     int                 maxeats;
     pthread_mutex_t     talk;
     pthread_mutex_t     *keys;
