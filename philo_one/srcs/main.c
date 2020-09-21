@@ -173,6 +173,7 @@ int     main(int ac, char **av)
             return (0);
         ft_core(&global);
         ft_globalmoni(&global);
+        clearall(&global);
         return (1);
     }
     ft_putstr("Error : launch correctly the program !\n", 2);

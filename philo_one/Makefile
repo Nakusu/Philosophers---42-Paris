@@ -1,22 +1,22 @@
 NAME	= philo_one
 
-LOCA1 	= ./srcs/
+LOCA1 	= srcs/
 
-LOCA2	= ./includes/
+LOCA2	= includes/
 
 SRCS	= 	${LOCA1}main.c \
-			${LOCA1}utils.c
-
-SRCSBONUS = 
+			${LOCA1}utils.c \
+			${LOCA1}end.c \
+			${LOCA1}ft_messages.c
 
 RM		= rm -f
 
 $(CC)	= gcc
 
-CFLAGS	= -Wall -Wextra -Werror -lpthread -I${LOCA2} -o ${NAME}
+CFLAGS	= -Wall -Wextra -Werror -I ${LOCA2} -o ${NAME}
 
 $(NAME): 
-			${CC} ${CFLAGS} ${SRCS}
+			${CC} ${CFLAGS} ${SRCS} -lpthread
 
 all:		${NAME}
 
