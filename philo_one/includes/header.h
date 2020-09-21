@@ -9,24 +9,13 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-long int    get_time(long int type);
-void        ft_putnbr(int n);
-void        ft_putstr(char *str, int fd);
-void        ft_putchar(char caract, int fd);
-int         ft_check(char **str);
-int         ft_isnum(char *str);
-long long   ft_atoi(const char *str);
-void        ft_start(void *global);
-void        osleep(long int time);
-char		*ft_itoa(long int n);
-void	    *ft_calloc(size_t count, size_t size);
-size_t      ft_strlen(char *str);
-
 typedef struct s_philo
 {
-    int         id;
-    int         eat;
-    long int    last_eat;
+    int                 id;
+    int                 eat;
+    long int            last_eat;
+    pthread_mutex_t     lock;
+    struct s_global     *global;
 }              t_philo;
 
 typedef struct s_global
@@ -43,5 +32,22 @@ typedef struct s_global
     pthread_mutex_t     *keys;
     t_philo             *philos;
 }             t_global;
+
+long int    get_time(long int type);
+void        ft_putnbr(int n);
+void        ft_putstr(char *str, int fd);
+void        ft_putchar(char caract, int fd);
+int         ft_check(char **str);
+int         ft_isnum(char *str);
+long long   ft_atoi(const char *str);
+void        ft_start(void *global);
+void        osleep(long int time);
+char		*ft_itoa(long int n);
+void	    *ft_calloc(size_t count, size_t size);
+size_t      ft_strlen(char *str);
+char        *ft_completestr(char *str, char *src);
+void        ft_messages(t_philo *philo, char *message);
+void        ft_messages2(t_philo *philo, char *message);
+
 
 #endif

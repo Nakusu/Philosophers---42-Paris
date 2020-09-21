@@ -15,6 +15,28 @@ void initKeys(t_global *global)
     }
 }
 
+void initphilos(t_global *global)
+{
+    int i;
+
+    i = 0;
+    if (!(global->philos = malloc((sizeof(t_philo) * global->maxthreads))))
+    {
+        ft_putstr("Error : malloc problem !\n", 2);
+        return ;
+    }
+    while (i < global->maxthreads)
+    {
+        global->philos[i].id = i;
+        global->philos[i].eat = 0;
+        global->philos[i].last_eat = 0;
+        global->philos[i].global = global;
+        pthread_mutex_init(&global->philos[i].lock, NULL);
+        pthread_mutex_unlock(&global->philos[i].lock);
+        i++;
+    }
+}
+
 int initGobal(char **str, int ac, t_global *global)
 {
     global->maxeats = (ac == 5) ? -1 : ft_atoi(str[5]);
@@ -26,107 +48,85 @@ int initGobal(char **str, int ac, t_global *global)
         ft_putstr("Error : launch correctly the program !\n", 2);
         return (0);
     }
-    if (!(global->philos = malloc((sizeof(t_philo) * global->maxthreads))))
-    {
-        ft_putstr("Error : malloc problem !\n", 2);
-        return (0);
-    }
+    initphilos(global);
     pthread_mutex_init(&global->talk, NULL);
     pthread_mutex_unlock(&global->talk);
     initKeys(global);
     return (1);
 }
 
-void    ft_tmessage(int type)
+void    ft_eat(t_philo *philo)
 {
-    if (type == 1)
-        ft_putstr(" is launch !\n", 1);
-    else if (type == 2)
-        ft_putstr(" is die !\n", 1);
-    else if (type == 3)
-        ft_putstr(" is eating !\n", 1);
-    else if (type == 4)
-        ft_putstr(" is sleeping ! \n", 1);
-    
-}
+    int      i;
+    t_global *global;
 
-char    *ft_completestr(char *str, char *src)
-{
-    size_t i;
-    size_t j;
-
-    i = 0;
-    j = 0;
-    str[i++] = ' ';
-    while (src[j])
-    {
-        str[i] = src[j];
-        i++;
-        j++;
-    }
-    str[i] = '\n';
-    return (str);
-}
-
-void    ft_messages(int id, long int timestamp, t_global *global, char *message)
-{
-    char    *tmp;
-
-    if (!(tmp = ft_calloc((ft_strlen(message) + 3), sizeof(char))))
-        return ;
-    if (pthread_mutex_lock(&global->talk) == 0)
-    {
-        ft_putstr(ft_itoa(timestamp), 1);
-        ft_putchar(' ', 1);
-        ft_putstr(ft_itoa(id), 1);
-        ft_putstr(ft_completestr(tmp, message), 1);
-        free(tmp);
-        pthread_mutex_unlock(&global->talk);
-    }
-}
-
-void    ft_eat(t_philo *philo, long int timestamp, t_global *global)
-{
-    int i;
-
-    i = 0;
+    global = philo->global;
     i = (philo->id == 0) ? global->maxthreads - 1 : -1 ;
-    if (pthread_mutex_lock(&global->keys[philo->id]) == 0 && pthread_mutex_lock(&global->keys[philo->id + i]) == 0)
+    if (pthread_mutex_lock(&global->keys[philo->id + i]) == 0)
     {
-        ft_messages(philo->id, timestamp, global, "as ta king a fork !");
-        ft_messages(philo->id, timestamp, global, "as taking a fork !");
-        ft_messages(philo->id, timestamp, global, "is eating !");
-        philo->last_eat = get_time(0);
-        osleep(global->timeEat);
-        pthread_mutex_unlock(&global->keys[philo->id]);
-        pthread_mutex_unlock(&global->keys[philo->id + i]);
+        ft_messages(philo, "as taking a fork !");
+        if (pthread_mutex_lock(&global->keys[philo->id]) == 0)
+        {
+            if (pthread_mutex_lock(&philo->lock) == 0)
+            {
+                ft_messages2(philo, "is eating !");
+                osleep(global->timeEat);
+                philo->last_eat = get_time(0);
+                pthread_mutex_unlock(&philo->lock);
+                philo->eat += 1;
+                pthread_mutex_unlock(&global->keys[philo->id]);
+                pthread_mutex_unlock(&global->keys[philo->id + i]);
+            }
+        }
     }
 }
 
 
-void    ft_sleep(t_philo *philo, long int timestamp, t_global *global)
+void    ft_sleep(t_philo *philo)
 {
-    ft_messages(philo->id, timestamp, global, "is sleeping !");
-    osleep(global->tsleep);
+    ft_messages(philo, "is sleeping !");
+    osleep(philo->global->tsleep);
 }
 
-void    *ft_jobs(void *global)
+void    *monitoring(void *args)
 {
-    t_global    *info;
-    long int    time;
-    int         i;
+   t_philo  *philo;
+   t_global *global;
 
-    info = (t_global*)global;
-    i = info->threads;
-    info->philos[i].id = info->threads;
-    ft_messages(i, get_time(info->t_start), info, "was launch");
-    info->philos[i].last_eat = get_time(0);
-    while (info->die == 0)
+   philo = (t_philo *)args;
+   global = philo->global;
+    while (global->die == 0)
     {
-        time = get_time(info->t_start);
-        ft_eat(&info->philos[i], time, info);
-        ft_sleep(&info->philos[i], time, info);
-        ft_messages(info->philos[i].id, time, global, "is thinking !");
+        if (pthread_mutex_lock(&philo->lock) == 0)
+        {
+            if (get_time(philo->last_eat) > global->timeDie)
+            {
+                ft_messages(philo, "is die !");
+                global->die += 1;
+            }
+            pthread_mutex_unlock(&philo->lock);
+        }
+    }
+    return (args);
+}
+
+void    *ft_jobs(void *args)
+{
+    t_global    *global;
+    t_philo     *philo;
+    pthread_t   t_monitoring;
+
+    philo = (t_philo *)args;
+    global = philo->global;
+    if (pthread_create(&t_monitoring, NULL, monitoring, args) != 0)
+        return (global);
+    pthread_detach(t_monitoring);
+    philo->last_eat = get_time(0);
+    while (global->die == 0)
+    {
+        ft_eat(philo);
+        ft_sleep(philo);
+        ft_messages(philo, "is thinking !");
     }
     return (global);
 }
@@ -139,32 +139,28 @@ void    ft_core(t_global *global)
     i = 0;
     while (i < global->maxthreads)
     {
-        if (pthread_create(&tid, NULL, ft_jobs, global) != 0)
+        if (pthread_create(&tid, NULL, ft_jobs, &global->philos[i]) != 0)
             return ;
         pthread_detach(tid);
-        global->threads += 1;
-        osleep(5);
+        osleep(1);
         i++;
     }
 }
 
-void    ft_monitoring(t_global *global)
+void    ft_globalmoni(t_global *global)
 {
     int i;
+    int v;
 
     while (global->die == 0)
     {
         i = 0;
-        while (i < global->maxthreads && global->die == 0)
-        {
-            if (global->philos[i].last_eat > 0 && get_time(global->philos[i].last_eat) > global->timeDie)
-            {
-                //printf("%ld\n", global->philos[i].last_eat);
-                ft_messages(global->philos[i].id, get_time(global->t_start), global, "is die !");
-                global->die += 1;
-            }
-            i++;
-        }
+        v = 0;
+        while (i < global->maxthreads && global->maxeats > 0)
+            if (global->philos[i++].eat == global->maxeats)
+                v++;
+        if (v == (global->maxthreads - 1))
+            return ;
     }
 }
 
@@ -176,7 +172,7 @@ int     main(int ac, char **av)
         if (initGobal(av, ac, &global) == 0)
             return (0);
         ft_core(&global);
-        ft_monitoring(&global);
+        ft_globalmoni(&global);
         return (1);
     }
     ft_putstr("Error : launch correctly the program !\n", 2);
