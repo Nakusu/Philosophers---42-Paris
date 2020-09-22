@@ -6,8 +6,11 @@ LOCA2	= includes/
 
 SRCS	= 	${LOCA1}main.c \
 			${LOCA1}utils.c \
+			${LOCA1}utils2.c \
 			${LOCA1}end.c \
 			${LOCA1}ft_messages.c \
+			${LOCA1}time.c \
+			${LOCA1}init.c \
 			${LOCA1}monitoring.c
 
 RM		= rm -f

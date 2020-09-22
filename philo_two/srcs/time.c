@@ -1,32 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   end.c                                              :+:      :+:    :+:   */
+/*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/21 13:15:36 by user42            #+#    #+#             */
-/*   Updated: 2020/09/22 16:27:52 by user42           ###   ########.fr       */
+/*   Created: 2020/09/22 17:13:34 by user42            #+#    #+#             */
+/*   Updated: 2020/09/22 17:14:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-int		clearall(t_global *global)
+long int						get_time(long int type)
 {
-	int		i;
-	char	*tmp;
+	long int					time;
+	struct timeval				te;
 
-	i = 0;
-	while (i < global->maxthreads)
-	{
-		tmp = ft_itoa(i);
-		sem_unlink(tmp);
-		free(tmp);
-		i++;
-	}
-	sem_unlink("KEYS");
-	sem_unlink("TALK");
-	free(global->philos);
-	return (1);
+	gettimeofday(&te, NULL);
+	if (type == 0)
+		time = te.tv_sec * 1000LL + te.tv_usec / 1000;
+	else
+		time = (te.tv_sec * 1000LL + te.tv_usec / 1000) - type;
+	return (time);
+}
+
+void							osleep(long int time)
+{
+	long int		start;
+
+	start = get_time(0);
+	while (get_time(start) < time)
+		usleep(1);
 }
