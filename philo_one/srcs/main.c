@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/22 14:09:33 by user42            #+#    #+#             */
+/*   Updated: 2020/09/22 14:15:27 by user42           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 void initKeys(t_global *global)
@@ -70,8 +82,8 @@ void    ft_eat(t_philo *philo)
             if (pthread_mutex_lock(&philo->lock) == 0)
             {
                 ft_messages2(philo, "is eating !");
-                osleep(global->timeEat);
                 philo->last_eat = get_time(0);
+                osleep(global->timeEat);
                 pthread_mutex_unlock(&philo->lock);
                 philo->eat += 1;
                 pthread_mutex_unlock(&global->keys[philo->id]);
@@ -86,28 +98,6 @@ void    ft_sleep(t_philo *philo)
 {
     ft_messages(philo, "is sleeping !");
     osleep(philo->global->tsleep);
-}
-
-void    *monitoring(void *args)
-{
-   t_philo  *philo;
-   t_global *global;
-
-   philo = (t_philo *)args;
-   global = philo->global;
-    while (global->die == 0)
-    {
-        if (pthread_mutex_lock(&philo->lock) == 0)
-        {
-            if (get_time(philo->last_eat) > global->timeDie)
-            {
-                ft_messages(philo, "is die !");
-                global->die += 1;
-            }
-            pthread_mutex_unlock(&philo->lock);
-        }
-    }
-    return (args);
 }
 
 void    *ft_jobs(void *args)
@@ -144,23 +134,6 @@ void    ft_core(t_global *global)
         pthread_detach(tid);
         osleep(1);
         i++;
-    }
-}
-
-void    ft_globalmoni(t_global *global)
-{
-    int i;
-    int v;
-
-    while (global->die == 0)
-    {
-        i = 0;
-        v = 0;
-        while (i < global->maxthreads && global->maxeats > 0)
-            if (global->philos[i++].eat == global->maxeats)
-                v++;
-        if (v == (global->maxthreads - 1))
-            return ;
     }
 }
 

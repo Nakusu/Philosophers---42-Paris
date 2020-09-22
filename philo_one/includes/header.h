@@ -49,5 +49,7 @@ char        *ft_completestr(char *str, char *src);
 void        ft_messages(t_philo *philo, char *message);
 void        ft_messages2(t_philo *philo, char *message);
 int         clearall(t_global *global);
+void        *monitoring(void *args);
+void        ft_globalmoni(t_global *global);
 
 #endif
