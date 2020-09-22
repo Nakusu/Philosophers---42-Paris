@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 14:09:33 by user42            #+#    #+#             */
-/*   Updated: 2020/09/22 14:15:27 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/22 14:28:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,13 @@ void    ft_eat(t_philo *philo)
         {
             if (pthread_mutex_lock(&philo->lock) == 0)
             {
-                ft_messages2(philo, "is eating !");
                 philo->last_eat = get_time(0);
-                osleep(global->timeEat);
-                pthread_mutex_unlock(&philo->lock);
+                ft_messages2(philo, "is eating !");
                 philo->eat += 1;
+                osleep(global->timeEat);
                 pthread_mutex_unlock(&global->keys[philo->id]);
                 pthread_mutex_unlock(&global->keys[philo->id + i]);
+                pthread_mutex_unlock(&philo->lock);
             }
         }
     }

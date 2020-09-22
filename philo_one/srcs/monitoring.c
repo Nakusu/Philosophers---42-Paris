@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:40 by user42            #+#    #+#             */
-/*   Updated: 2020/09/21 14:20:23 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/22 14:29:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void    *monitoring(void *args)
             }
             pthread_mutex_unlock(&philo->lock);
         }
+        osleep(1);
     }
     return (args);
 }
