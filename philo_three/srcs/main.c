@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:43 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 19:13:32 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 19:43:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	ft_core(t_global *global)
 	int			i;
 	pid_t		tid[global->maxthreads];
 	pthread_t	t_monitoring;
-
 
 	i = 0;
 	if (pthread_create(&t_monitoring, NULL, ft_globalmoni, global) != 0)

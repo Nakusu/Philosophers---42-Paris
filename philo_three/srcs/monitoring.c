@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:40 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 19:16:54 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 19:43:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void			*monitoring(void *args)
 
 void			*ft_globalmoni(void *args)
 {
-	t_global 	*global;
+	t_global	*global;
 	int			i;
 
 	i = 0;
