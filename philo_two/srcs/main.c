@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:43 by user42            #+#    #+#             */
-/*   Updated: 2020/09/22 16:46:15 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 10:46:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ void	ft_eat(t_philo *philo)
 
 	global = philo->global;
 	sem_wait(global->keys);
-	ft_messages(philo, "has taken a fork !");
+	ft_messages(philo, "has taken a fork");
 	sem_wait(global->keys);
 	sem_wait(philo->lock);
 	philo->last_eat = get_time(0);
-	ft_messages2(philo, "is eating !");
-	osleep(global->timeEat);
+	ft_messages2(philo, "is eating");
+	osleep(global->timeeat);
 	sem_post(philo->lock);
 	if (philo->global->maxeats > 0 &&
 	(philo->eat + 1) == philo->global->maxeats)
@@ -39,7 +39,7 @@ void	ft_eat(t_philo *philo)
 
 void	ft_sleep(t_philo *philo)
 {
-	ft_messages(philo, "is sleeping !");
+	ft_messages(philo, "is sleeping");
 	osleep(philo->global->tsleep);
 }
 
@@ -59,7 +59,7 @@ void	*ft_jobs(void *args)
 	{
 		ft_eat(philo);
 		ft_sleep(philo);
-		ft_messages(philo, "is thinking !");
+		ft_messages(philo, "is thinking");
 	}
 	return (global);
 }

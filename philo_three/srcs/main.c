@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/22 14:09:33 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:44:13 by user42           ###   ########.fr       */
+/*   Created: 2020/09/21 13:15:43 by user42            #+#    #+#             */
+/*   Updated: 2020/09/23 10:46:45 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,27 @@
 
 void	ft_eat(t_philo *philo)
 {
-	int			i;
 	t_global	*global;
 
 	global = philo->global;
-	i = (philo->id == 0) ? global->maxthreads - 1 : -1;
-	if (pthread_mutex_lock(&global->keys[philo->id + i]) == 0)
+	sem_wait(global->keys);
+	ft_messages(philo, "has taken a fork");
+	sem_wait(global->keys);
+	sem_wait(philo->lock);
+	philo->last_eat = get_time(0);
+	ft_messages2(philo, "is eating");
+	osleep(global->timeeat);
+	sem_post(philo->lock);
+	if (philo->global->maxeats > 0 &&
+	(philo->eat + 1) == philo->global->maxeats)
 	{
-		ft_messages(philo, "has taken a fork");
-		if (pthread_mutex_lock(&global->keys[philo->id]) == 0)
-		{
-			if (pthread_mutex_lock(&philo->lock) == 0)
-			{
-				philo->last_eat = get_time(0);
-				ft_messages2(philo, "is eating");
-				philo->eat += 1;
-				osleep(global->timeeat);
-				pthread_mutex_unlock(&global->keys[philo->id]);
-				pthread_mutex_unlock(&global->keys[philo->id + i]);
-				pthread_mutex_unlock(&philo->lock);
-			}
-		}
+		philo->eat += 2;
+		philo->global->eats += 1;
 	}
+	else if (philo->global->maxeats > 0)
+		philo->eat += 1;
+	sem_post(global->keys);
+	sem_post(global->keys);
 }
 
 void	ft_sleep(t_philo *philo)

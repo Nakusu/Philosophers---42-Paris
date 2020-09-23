@@ -5,14 +5,20 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/22 18:00:38 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:35:58 by user42           ###   ########.fr       */
+/*   Created: 2020/09/23 09:27:02 by user42            #+#    #+#             */
+/*   Updated: 2020/09/23 10:41:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void		initphilos(t_global *global)
+sem_t	*launch_sem(char *array, int i)
+{
+	sem_unlink(array);
+	return (sem_open(array, O_CREAT | O_EXCL, 0644, i));
+}
+
+void	initphilos(t_global *global)
 {
 	int		i;
 	char	*tmp;
@@ -36,7 +42,7 @@ void		initphilos(t_global *global)
 	}
 }
 
-int			initgobal(char **str, int ac, t_global *global)
+int		initgobal(char **str, int ac, t_global *global)
 {
 	global->maxeats = (ac == 5) ? -1 : ft_atoi(str[5]);
 	global->threads = 0;
