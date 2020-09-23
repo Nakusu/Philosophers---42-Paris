@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:40 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 15:12:59 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 19:16:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void			*monitoring(void *args)
 			{
 				global->die += 1;
 				ft_messages(philo, "died");
+				sem_post(global->lock);
 			}
 			sem_post(philo->lock);
 		}
@@ -35,9 +36,18 @@ void			*monitoring(void *args)
 	return (args);
 }
 
-void			ft_globalmoni(t_global *global)
+void			*ft_globalmoni(void *args)
 {
-	while (global->die == 0)
-		if (global->eats == global->maxthreads && global->maxeats > 0)
-			return ;
+	t_global 	*global;
+	int			i;
+
+	i = 0;
+	global = (t_global*)args;
+	while (i < global->maxthreads)
+	{
+		sem_wait(global->philos[i].lockeat);
+		i++;
+	}
+	sem_post(global->lock);
+	return (global);
 }

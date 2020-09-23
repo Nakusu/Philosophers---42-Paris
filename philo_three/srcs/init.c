@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 09:27:02 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:41:41 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 19:14:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	initphilos(t_global *global)
 		global->philos[i].last_eat = 0;
 		global->philos[i].global = global;
 		global->philos[i].lock = launch_sem(tmp, 1);
+		global->philos[i].lockeat = launch_sem(tmp, 0);
 		free(tmp);
 		i++;
 	}
@@ -59,6 +60,7 @@ int		initgobal(char **str, int ac, t_global *global)
 		return (0);
 	}
 	initphilos(global);
+	global->lock = launch_sem("LOCK", 0);
 	global->talk = launch_sem("TALK", 1);
 	global->keys = launch_sem("KEYS", global->maxthreads);
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 10:37:09 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:40:50 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 19:07:56 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <semaphore.h>
 # include <fcntl.h>
 # include <sys/stat.h>
+# include <signal.h>
+# include <string.h>
 
 typedef struct			s_philo
 {
@@ -30,6 +32,7 @@ typedef struct			s_philo
 	int					eat;
 	long int			last_eat;
 	sem_t				*lock;
+	sem_t				*lockeat;
 	struct s_global		*global;
 }						t_philo;
 
@@ -46,6 +49,8 @@ typedef struct			s_global
 	int					eats;
 	sem_t				*talk;
 	sem_t				*keys;
+	sem_t				*lock;
+	pid_t				*tids;
 	t_philo				*philos;
 }						t_global;
 
@@ -66,7 +71,7 @@ void					ft_messages(t_philo *philo, char *message);
 void					ft_messages2(t_philo *philo, char *message);
 int						clearall(t_global *global);
 void					*monitoring(void *args);
-void					ft_globalmoni(t_global *global);
+void					*ft_globalmoni(void *args);
 sem_t					*launch_sem(char *array, int i);
 int						initgobal(char **str, int ac, t_global *global);
 void					initphilos(t_global *global);

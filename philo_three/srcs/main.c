@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:43 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:46:45 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 19:13:32 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,20 @@ void	ft_eat(t_philo *philo)
 	t_global	*global;
 
 	global = philo->global;
-	sem_wait(global->keys);
-	ft_messages(philo, "has taken a fork");
-	sem_wait(global->keys);
-	sem_wait(philo->lock);
-	philo->last_eat = get_time(0);
-	ft_messages2(philo, "is eating");
-	osleep(global->timeeat);
-	sem_post(philo->lock);
-	if (philo->global->maxeats > 0 &&
-	(philo->eat + 1) == philo->global->maxeats)
+	if (sem_wait(global->keys) == 0 && sem_wait(philo->lock) == 0)
 	{
-		philo->eat += 2;
-		philo->global->eats += 1;
-	}
-	else if (philo->global->maxeats > 0)
+		ft_messages(philo, "has taken a fork");
+		sem_wait(global->keys);
+		philo->last_eat = get_time(0);
+		ft_messages2(philo, "is eating");
+		if (global->maxthreads == philo->eat)
+			sem_post(philo->lockeat);
 		philo->eat += 1;
-	sem_post(global->keys);
-	sem_post(global->keys);
+		osleep(global->timeeat);
+		sem_post(philo->lock);
+		sem_post(global->keys);
+		sem_post(global->keys);
+	}
 }
 
 void	ft_sleep(t_philo *philo)
@@ -67,17 +63,25 @@ void	*ft_jobs(void *args)
 void	ft_core(t_global *global)
 {
 	int			i;
-	pthread_t	tid;
+	pid_t		tid[global->maxthreads];
+	pthread_t	t_monitoring;
+
 
 	i = 0;
+	if (pthread_create(&t_monitoring, NULL, ft_globalmoni, global) != 0)
+		return ;
+	pthread_detach(t_monitoring);
 	while (i < global->maxthreads)
 	{
-		if (pthread_create(&tid, NULL, ft_jobs, &global->philos[i]) != 0)
-			return ;
-		pthread_detach(tid);
+		if (!(tid[i] = fork()))
+			ft_jobs(&global->philos[i]);
 		osleep(1);
 		i++;
 	}
+	sem_wait(global->lock);
+	i = 0;
+	while (i < global->maxthreads)
+		kill(tid[i++], SIGKILL);
 }
 
 int		main(int ac, char **av)
@@ -89,7 +93,6 @@ int		main(int ac, char **av)
 		if (initgobal(av, ac, &global) == 0)
 			return (0);
 		ft_core(&global);
-		ft_globalmoni(&global);
 		clearall(&global);
 		return (1);
 	}
