@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 10:11:08 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:17:30 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 10:56:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct			s_global
 	int					maxthreads;
 	int					threads;
 	int					die;
+	int					eats;
 	long int			timedie;
 	long int			timeeat;
 	long int			tsleep;

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:40 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:44:20 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 10:55:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,7 @@ void	*monitoring(void *args)
 
 void	ft_globalmoni(t_global *global)
 {
-	int	i;
-	int	v;
-
 	while (global->die == 0)
-	{
-		i = 0;
-		v = 0;
-		while (i < global->maxthreads && global->maxeats > 0)
-			if (global->philos[i++].eat == global->maxeats)
-				v++;
-		if (v == (global->maxthreads - 1))
+		if (global->eats == global->maxthreads && global->maxeats > 0)
 			return ;
-	}
 }

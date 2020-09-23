@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 10:01:46 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:25:18 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 10:56:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int		initgobal(char **str, int ac, t_global *global)
 	global->threads = 0;
 	global->die = 0;
 	global->t_start = get_time(0);
+	global->eats = 0;
 	if ((ac == 6 && global->maxeats <= 0) ||
 	(global->maxthreads = ft_atoi(str[1])) <= 0 ||
 	(global->timedie = ft_atoi(str[2])) <= 0 ||
