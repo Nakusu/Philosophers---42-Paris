@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:51 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:01:17 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 10:52:05 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	ft_messages2(t_philo *philo, char *message)
 {
 	if (pthread_mutex_lock(&philo->global->talk) == 0)
 	{
-		ft_printmsg(philo, "has taken a fork !");
+		ft_printmsg(philo, "has taken a fork");
 		ft_printmsg(philo, message);
 	}
 	pthread_mutex_unlock(&philo->global->talk);
