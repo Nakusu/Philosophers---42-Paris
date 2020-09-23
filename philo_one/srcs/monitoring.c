@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:40 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:55:26 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 15:05:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ void	*monitoring(void *args)
 	{
 		if (pthread_mutex_lock(&philo->lock) == 0)
 		{
-			if (get_time(philo->last_eat) > global->timedie)
+			if (get_time(philo->last_eat) > global->timedie && global->die == 0)
 			{
-				ft_messages(philo, "died");
 				global->die += 1;
+				ft_messages(philo, "died");
 			}
 			pthread_mutex_unlock(&philo->lock);
 		}
