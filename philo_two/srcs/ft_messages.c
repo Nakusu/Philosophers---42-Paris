@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:51 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:51:41 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 12:56:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,14 @@ void		ft_printmsg(t_philo *philo, char *message)
 {
 	char	tmp[50];
 	char	tmpnbr[50];
+	char	*tmp1;
+	char	*tmp2;
 
-	ft_completenbr(tmpnbr,
-	ft_itoa(get_time(philo->global->t_start))
-	, ft_itoa(philo->id));
+	tmp1 = ft_itoa(get_time(philo->global->t_start));
+	tmp2 = ft_itoa(philo->id);
+	ft_completenbr(tmpnbr, tmp1, tmp2);
+	free(tmp1);
+	free(tmp2);
 	ft_putstr(tmpnbr, 1);
 	ft_putstr(ft_completestr(tmp, message), 1);
 }
