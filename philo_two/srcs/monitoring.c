@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:40 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:46:10 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/23 15:11:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	*monitoring(void *args)
 		{
 			if (get_time(philo->last_eat) > global->timedie)
 			{
-				ft_messages(philo, "died");
 				global->die += 1;
+				ft_messages(philo, "died");
 			}
 			sem_post(philo->lock);
 		}
