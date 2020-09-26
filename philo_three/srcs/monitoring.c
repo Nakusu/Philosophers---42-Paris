@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:40 by user42            #+#    #+#             */
-/*   Updated: 2020/09/26 16:27:17 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/26 17:42:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void			*ft_globalmoni(void *args)
 			sem_wait(global->philos[i].lockeat);
 			i++;
 		}
+		global->die += 1;
 		sem_post(global->lock);
 	}
 	return (global);
