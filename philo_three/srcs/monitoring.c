@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:40 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 19:43:35 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/26 16:27:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,14 @@ void			*ft_globalmoni(void *args)
 
 	i = 0;
 	global = (t_global*)args;
-	while (i < global->maxthreads)
+	if (global->maxeats != -1)
 	{
-		sem_wait(global->philos[i].lockeat);
-		i++;
+		while (i < global->maxthreads)
+		{
+			sem_wait(global->philos[i].lockeat);
+			i++;
+		}
+		sem_post(global->lock);
 	}
-	sem_post(global->lock);
 	return (global);
 }
