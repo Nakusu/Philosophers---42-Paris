@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:43 by user42            #+#    #+#             */
-/*   Updated: 2020/09/26 18:03:46 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/26 18:10:18 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,9 @@ void	ft_eat(t_philo *philo)
 	ft_messages2(philo, "is eating");
 	osleep(global->timeeat);
 	sem_post(philo->lock);
-	if (philo->global->maxeats != 1 && philo->eat < philo->global->maxeats)
-		philo->eat += 1;
-	else if (philo->global->maxeats == philo->eat)
-	{
+	philo->eat += 1;
+	if (philo->global->maxeats != 1 && philo->eat == philo->global->maxeats)
 		philo->global->eats += 1;
-		philo->eat += 1;
-	}
 	sem_post(global->keys);
 	sem_post(global->keys);
 }
