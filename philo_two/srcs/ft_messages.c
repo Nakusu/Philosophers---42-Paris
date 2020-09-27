@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:51 by user42            #+#    #+#             */
-/*   Updated: 2020/09/27 13:56:57 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/27 14:52:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,9 @@ void		ft_messages(t_philo *philo, char *message)
 
 void		ft_messages2(t_philo *philo, char *message)
 {
+	sem_wait(philo->global->talk);
+	ft_printmsg(philo, "has taken a fork");
+	ft_printmsg(philo, message);
 	if (philo->global->die == 0)
-	{
-		sem_wait(philo->global->talk);
-		ft_printmsg(philo, "has taken a fork");
-		ft_printmsg(philo, message);
 		sem_post(philo->global->talk);
-	}
 }

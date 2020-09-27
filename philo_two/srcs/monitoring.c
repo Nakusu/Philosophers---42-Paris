@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:40 by user42            #+#    #+#             */
-/*   Updated: 2020/09/27 14:02:27 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/27 14:43:00 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	ft_messagesend(t_philo *philo, char *message)
 		sem_wait(philo->global->talk);
 		philo->global->die += 1;
 		ft_printmsg(philo, message);
-		sem_post(philo->global->talk);
 	}
 }
 
