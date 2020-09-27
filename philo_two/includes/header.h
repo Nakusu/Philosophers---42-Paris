@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 10:27:54 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 10:34:08 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/27 13:55:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ sem_t						*launch_sem(char *array, int i);
 void						initphilos(t_global *global);
 int							initgobal(char **str, int ac, t_global *global);
 char						*ft_itoa(long int n);
+void						ft_messagesend(t_philo *philo, char *message);
 
 #endif
