@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:40 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 15:12:01 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/27 16:00:24 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,8 @@ void	ft_globalmoni(t_global *global)
 {
 	while (global->die == 0)
 		if (global->eats == global->maxthreads && global->maxeats > 0)
+		{
+			global->die += 1;
 			return ;
+		}
 }
