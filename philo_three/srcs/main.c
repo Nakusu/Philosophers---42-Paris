@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 13:15:43 by user42            #+#    #+#             */
-/*   Updated: 2020/09/27 13:49:16 by user42           ###   ########.fr       */
+/*   Updated: 2020/09/27 14:16:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ void	ft_core(t_global *global)
 		i++;
 	}
 	sem_wait(global->lock);
-	i = -1;
-	while (++i < global->maxthreads)
-		kill(tid[i], SIGKILL);
+	i = 0;
+	while (i != global->maxthreads)
+		kill(tid[i++], SIGKILL);
 }
 
 int		main(int ac, char **av)
