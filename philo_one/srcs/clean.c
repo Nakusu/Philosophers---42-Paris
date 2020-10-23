@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   end.c                                              :+:      :+:    :+:   */
+/*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/21 13:15:36 by user42            #+#    #+#             */
-/*   Updated: 2020/09/23 09:52:10 by user42           ###   ########.fr       */
+/*   Created: 2020/10/22 15:27:03 by user42            #+#    #+#             */
+/*   Updated: 2020/10/23 11:06:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "../includes/philos.h"
 
-int			clearall(t_global *global)
+int			ft_free_all(t_global *global)
 {
 	int i;
 
-	i = 0;
-	while (i < global->maxthreads)
+	i = -1;
+	while (++i < global->nb_philos)
 	{
 		pthread_mutex_destroy(&global->keys[i]);
 		pthread_mutex_destroy(&global->philos[i].lock);
-		i++;
 	}
 	pthread_mutex_destroy(&global->talk);
 	free(global->keys);
@@ -29,7 +28,7 @@ int			clearall(t_global *global)
 	return (1);
 }
 
-long int	get_time(long int type)
+long int	ft_get_time(long int type)
 {
 	long int		time;
 	struct timeval	te;
@@ -42,11 +41,11 @@ long int	get_time(long int type)
 	return (time);
 }
 
-void		osleep(long int time)
+void		ft_usleep(long int time)
 {
 	long int		start;
 
-	start = get_time(0);
-	while (get_time(start) < time)
+	start = ft_get_time(0);
+	while (ft_get_time(start) < time)
 		usleep(1);
 }

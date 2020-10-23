@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   end.c                                              :+:      :+:    :+:   */
+/*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/21 13:15:36 by user42            #+#    #+#             */
-/*   Updated: 2020/09/22 16:27:52 by user42           ###   ########.fr       */
+/*   Created: 2020/10/22 15:31:00 by user42            #+#    #+#             */
+/*   Updated: 2020/10/23 11:06:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "../includes/philos.h"
 
-int		clearall(t_global *global)
+int		ft_free_all(t_global *global)
 {
 	int		i;
 	char	*tmp;
 
-	i = 0;
-	while (i < global->maxthreads)
+	i = -1;
+	while (++i < global->nb_philos)
 	{
 		tmp = ft_itoa(i);
 		sem_unlink(tmp);
 		free(tmp);
-		i++;
 	}
 	sem_unlink("KEYS");
 	sem_unlink("TALK");
