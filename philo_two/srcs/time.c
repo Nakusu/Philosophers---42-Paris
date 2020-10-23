@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/22 15:31:28 by user42            #+#    #+#             */
-/*   Updated: 2020/10/23 11:06:23 by user42           ###   ########.fr       */
+/*   Created: 2020/09/22 17:13:34 by user42            #+#    #+#             */
+/*   Updated: 2020/09/22 17:14:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philos.h"
+#include "header.h"
 
-long int						ft_get_time(long int type)
+long int						get_time(long int type)
 {
 	long int					time;
 	struct timeval				te;
@@ -25,11 +25,11 @@ long int						ft_get_time(long int type)
 	return (time);
 }
 
-void							ft_usleep(long int time)
+void							osleep(long int time)
 {
 	long int		start;
 
-	start = ft_get_time(0);
-	while (ft_get_time(start) < time)
+	start = get_time(0);
+	while (get_time(start) < time)
 		usleep(1);
 }

@@ -5,20 +5,20 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/22 15:27:26 by user42            #+#    #+#             */
-/*   Updated: 2020/10/23 11:06:12 by user42           ###   ########.fr       */
+/*   Created: 2020/09/21 13:15:40 by user42            #+#    #+#             */
+/*   Updated: 2020/09/27 16:14:14 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philos.h"
+#include "header.h"
 
-void	ft_last_message(t_philo *philo, char *message)
+void	ft_messagesend(t_philo *philo, char *message)
 {
 	if (philo->global->die == 0)
 	{
 		pthread_mutex_lock(&philo->global->talk);
 		philo->global->die += 1;
-		ft_print_msg(philo, message);
+		ft_printmsg(philo, message);
 	}
 }
 
@@ -33,19 +33,19 @@ void	*monitoring(void *args)
 	{
 		if (pthread_mutex_lock(&philo->lock) == 0)
 		{
-			if (ft_get_time(philo->last_meal) > global->time_to_die)
-				ft_last_message(philo, "died");
+			if (get_time(philo->last_eat) > global->timedie)
+				ft_messagesend(philo, "died");
 			pthread_mutex_unlock(&philo->lock);
 		}
-		ft_usleep(1);
+		osleep(1);
 	}
 	return (args);
 }
 
-void	ft_global_monitoring(t_global *global)
+void	ft_globalmoni(t_global *global)
 {
 	while (global->die == 0)
-		if (global->eats == global->nb_philos && global->nb_max_meals > 0)
+		if (global->eats == global->maxthreads && global->maxeats > 0)
 		{
 			global->die += 1;
 			return ;

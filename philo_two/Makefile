@@ -1,45 +1,34 @@
-NAME = 	philo_two
+NAME	= philo_two
 
-SRCS_PATH = ./srcs/
-OBJS_PATH = ./objs/
-INCS_PATH = ./includes/
+LOCA1 	= srcs/
 
-SRCS = $(addprefix $(SRCS_PATH),$(SRCS_NAME))
-OBJS = $(addprefix $(OBJS_PATH),$(OBJS_NAME))
+LOCA2	= includes/
 
-OBJS_NAME = $(SRCS_NAME:.c=.o)
+SRCS	= 	${LOCA1}main.c \
+			${LOCA1}utils.c \
+			${LOCA1}utils2.c \
+			${LOCA1}end.c \
+			${LOCA1}ft_messages.c \
+			${LOCA1}time.c \
+			${LOCA1}init.c \
+			${LOCA1}monitoring.c
 
-SRCS_NAME= main.c utils.c clean.c messages.c init.c utils2.c monitoring.c time.c
+RM		= rm -f
 
-CC = gcc
+$(CC)	= gcc
 
-FLAGS =	-Wall -Werror -Wextra
+CFLAGS	= -Wall -Wextra -Werror -I ${LOCA2} -o ${NAME}
 
+$(NAME): 
+			${CC} ${CFLAGS} ${SRCS} -lpthread
 
-all: 			$(NAME)
-
-$(NAME):	$(OBJS)
-		@$(CC) -o $(NAME) $(FLAGS) $(OBJS) -lpthread
-		@echo "\033[0;34mExecutable philo_two \033[0m \033[0;32m [OK] \033[0m"
-
-
-$(OBJS_PATH)%.o: $(SRCS_PATH)%.c includes/philos.h
-		@mkdir -p $(OBJS_PATH)
-		@gcc $(FLAGS) -o $@ -c $<
-
-run : 
-		make re
-		./$(NAME)
-
+all:		${NAME}
 
 clean:
-		@rm -rf $(OBJS_PATH)
-		@echo "deleted ./objs/"
+			${RM} ${NAME}
 
-fclean: clean
-		@rm -rf $(NAME)
-		@echo "deleted ./philo_two"
+fclean :	clean
 
-re: fclean all
+re:			fclean all
 
-.PHONY:			all clean fclean re
+.PHONY:		all clean fclean re

@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/22 15:27:32 by user42            #+#    #+#             */
-/*   Updated: 2020/10/23 11:06:13 by user42           ###   ########.fr       */
+/*   Created: 2020/09/23 10:07:37 by user42            #+#    #+#             */
+/*   Updated: 2020/09/23 10:25:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philos.h"
+#include "header.h"
 
 void				ft_putnbr(int n)
 {
@@ -36,9 +36,9 @@ void				ft_putchar(char caract, int fd)
 	write(fd, &caract, 1);
 }
 
-int					ft_strlen(char *str)
+size_t				ft_strlen(char *str)
 {
-	int i;
+	size_t i;
 
 	i = 0;
 	while (str[i])

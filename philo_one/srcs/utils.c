@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/22 15:27:37 by user42            #+#    #+#             */
-/*   Updated: 2020/10/23 11:06:12 by user42           ###   ########.fr       */
+/*   Created: 2020/09/21 13:15:47 by user42            #+#    #+#             */
+/*   Updated: 2020/09/23 10:26:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philos.h"
+#include "header.h"
 
 long long			ft_atoi(const char *str)
 {

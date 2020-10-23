@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/22 15:31:37 by user42            #+#    #+#             */
-/*   Updated: 2020/10/23 11:06:24 by user42           ###   ########.fr       */
+/*   Created: 2020/09/21 13:15:47 by user42            #+#    #+#             */
+/*   Updated: 2020/09/22 18:14:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philos.h"
+#include "header.h"
 
 sem_t				*launch_sem(char *array, int i)
 {

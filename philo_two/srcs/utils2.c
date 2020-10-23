@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/22 15:31:32 by user42            #+#    #+#             */
-/*   Updated: 2020/10/23 11:06:25 by user42           ###   ########.fr       */
+/*   Created: 2020/09/22 16:17:48 by user42            #+#    #+#             */
+/*   Updated: 2020/09/22 18:02:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philos.h"
+#include "header.h"
 
 void		ft_putchar(char caract, int fd)
 {

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philos.h                                           :+:      :+:    :+:   */
+/*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/23 11:06:45 by user42            #+#    #+#             */
-/*   Updated: 2020/10/23 11:08:21 by user42           ###   ########.fr       */
+/*   Created: 2020/09/23 10:27:54 by user42            #+#    #+#             */
+/*   Updated: 2020/09/27 14:03:32 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILOS_H
-# define PHILOS_H
+#ifndef HEADER_H
+# define HEADER_H
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -28,28 +28,28 @@ typedef struct				s_philo
 {
 	int						id;
 	int						eat;
-	long int				last_meal;
+	long int				last_eat;
 	sem_t					*lock;
 	struct s_global			*global;
 }							t_philo;
 
 typedef struct				s_global
 {
-	int						nb_philos;
+	int						maxthreads;
 	int						threads;
 	int						die;
-	long int				time_to_die;
-	long int				time_to_eat;
-	long int				time_to_sleep;
+	long int				timedie;
+	long int				timeeat;
+	long int				tsleep;
 	long int				t_start;
-	int						nb_max_meals;
+	int						maxeats;
 	int						eats;
 	sem_t					*talk;
 	sem_t					*keys;
 	t_philo					*philos;
 }							t_global;
 
-long int					ft_get_time(long int type);
+long int					get_time(long int type);
 void						ft_putnbr(int n);
 void						ft_putstr(char *str, int fd);
 void						ft_putchar(char caract, int fd);
@@ -57,21 +57,21 @@ int							ft_check(char **str);
 int							ft_isnum(char *str);
 long long					ft_atoi(const char *str);
 void						ft_start(void *global);
-void						ft_usleep(long int time);
+void						osleep(long int time);
 char						*ft_itoa(long int n);
 void						*ft_calloc(size_t count, size_t size);
 size_t						ft_strlen(char *str);
-char						*ft_construct_str(char *str, char *src);
+char						*ft_completestr(char *str, char *src);
 void						ft_messages(t_philo *philo, char *message);
 void						ft_messages2(t_philo *philo, char *message);
-int							ft_free_all(t_global *global);
+int							clearall(t_global *global);
 void						*monitoring(void *args);
-void						ft_global_monitoring(t_global *global);
+void						ft_globalmoni(t_global *global);
 sem_t						*launch_sem(char *array, int i);
-void						ft_init_philos(t_global *global);
-int							ft_init_gbl(char **str, int ac, t_global *global);
+void						initphilos(t_global *global);
+int							initgobal(char **str, int ac, t_global *global);
 char						*ft_itoa(long int n);
-void						ft_last_message(t_philo *philo, char *message);
-void						ft_print_msg(t_philo *philo, char *message);
+void						ft_messagesend(t_philo *philo, char *message);
+void						ft_printmsg(t_philo *philo, char *message);
 
 #endif
